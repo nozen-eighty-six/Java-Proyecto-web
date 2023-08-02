@@ -1,7 +1,18 @@
 package idat.Proyecto.entity;
 
-public class Producto {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="productos")
+public class Producto {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nombre;
 	private String descripcion;
@@ -9,9 +20,32 @@ public class Producto {
 	private Double precio;
 	private Integer cantidad;
 	
+	//Recibe un objeto Usuario
+	@ManyToOne
+	@JoinColumn(name="usuario_id")
+	private Usuario usuario;
+	
+	@ManyToOne
+	@JoinColumn(name="categoria_id")
+	private Categoria categoria;
+	
+	
 	public Producto() {
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	
+
 
 	public Producto(Integer id, String nombre, String descripcion, String imagen, Double precio, Integer cantidad) {
 		super();
@@ -22,6 +56,7 @@ public class Producto {
 		this.precio = precio;
 		this.cantidad = cantidad;
 	}
+
 
 	public Integer getId() {
 		return id;
@@ -71,6 +106,17 @@ public class Producto {
 		this.cantidad = cantidad;
 	}
 
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", imagen=" + imagen
