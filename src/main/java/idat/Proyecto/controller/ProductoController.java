@@ -69,23 +69,7 @@ public class ProductoController {
 			
 			
 		}
-		
-		//Cuando editas otras propiedades, el parámetro file no recibe valor
-		//Por tanto estará vacío al momento de la solicitud
-		else {
-				if(file.isEmpty()){
-					Producto p = new Producto();
-					p=prs.get(producto.getId()).get();
-					producto.setImagen(p.getImagen());
-				}
-				else {
-					String nombreImagen = ups.saveImage(file);
-					//Asignamos
-					producto.setImagen(nombreImagen);  
-					
-				}
-			
-		}
+
 		prs.save(producto);
 			
 		
@@ -110,13 +94,50 @@ public class ProductoController {
 	}
 	
 	@PostMapping("/update")
-	public String update(Producto producto) {
+	public String update(Producto producto,@RequestParam("img") MultipartFile file) throws IOException {
+		
+		Producto p = new Producto();
+		p=prs.get(producto.getId()).get();
+		
+		//Cuando editas otras propiedades, el parámetro file no recibe valor
+		//Por tanto estará vacío al momento de la solicitud
+		
+				if(file.isEmpty()){
+					
+					producto.setImagen(p.getImagen());
+				}
+				else {
+					
+					//Si no es diferente, que no me lo elimine de mi directorio
+					if(!p.getImagen().equals("default.jpg")) {
+						ups.deleteImage(p.getImagen());
+						
+					}
+					
+					String nombreImagen = ups.saveImage(file);
+					//Asignamos
+					producto.setImagen(nombreImagen);  
+					
+				}
+				producto.setUsuario(p.getUsuario());
+
 		prs.update(producto);
 		return "redirect:/productos";
 	}
 	
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable Integer id) {
+		
+		//Capturo el objeto
+		Producto p = new Producto();
+		p = prs.get(id).get();
+		
+		//Si no es diferente, que no me lo elimine de mi directorio
+		if(!p.getImagen().equals("default.jpg")) {
+			ups.deleteImage(p.getImagen());
+			
+		}
+		
 		
 		prs.delete(id);
 		return "redirect:/productos";
