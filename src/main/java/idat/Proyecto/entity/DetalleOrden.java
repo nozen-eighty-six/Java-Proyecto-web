@@ -23,7 +23,6 @@ public class DetalleOrden {
 	private Double total;
 	
 	@OneToOne
-	@JoinColumn(name="orden_id")
 	private Orden orden;
 	
 	@ManyToOne

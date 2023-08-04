@@ -15,15 +15,15 @@
   <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
 
   <!-- Custom styles for this template -->
-  <link href="@{css/heroic-features.css}" rel="stylesheet">
+  <link th:href="@{css/heroic-features.css}" rel="stylesheet">
 
 </head>
 
 <body>
 
-	<div th:include="administrador/template_admin.html::header"></div>
+  <!-- Navigation -->
+  <div th:include="administrador/template_admin.html::header"></div>
   
-
     <!-- Page Content -->
     <div class="container">
 
@@ -89,7 +89,6 @@
     </div>
     <!-- /.container -->
 
-    <!-- Footer -->
     <div th:include="administrador/template_admin.html::footer"></div>
 
     <!-- Bootstrap core JavaScript -->

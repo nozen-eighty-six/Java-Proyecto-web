@@ -22,11 +22,9 @@ public class Producto {
 	
 	//Recibe un objeto Usuario
 	@ManyToOne
-	@JoinColumn(name="usuario_id")
 	private Usuario usuario;
 	
 	@ManyToOne
-	@JoinColumn(name="categoria_id")
 	private Categoria categoria;
 	
 	
@@ -47,7 +45,10 @@ public class Producto {
 	
 
 
-	public Producto(Integer id, String nombre, String descripcion, String imagen, Double precio, Integer cantidad) {
+
+
+	public Producto(Integer id, String nombre, String descripcion, String imagen, Double precio, Integer cantidad,
+			Usuario usuario, Categoria categoria) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -55,6 +56,8 @@ public class Producto {
 		this.imagen = imagen;
 		this.precio = precio;
 		this.cantidad = cantidad;
+		this.usuario = usuario;
+		this.categoria = categoria;
 	}
 
 
