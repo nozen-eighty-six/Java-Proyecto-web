@@ -23,9 +23,10 @@ public class Producto {
 	//Recibe un objeto Usuario
 	@ManyToOne
 	private Usuario usuario;
-	
+
+	/*
 	@ManyToOne
-	private Categoria categoria;
+	private Categoria categoria;*/
 	
 	
 	public Producto() {
@@ -48,7 +49,7 @@ public class Producto {
 
 
 	public Producto(Integer id, String nombre, String descripcion, String imagen, Double precio, Integer cantidad,
-			Usuario usuario, Categoria categoria) {
+			Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -57,7 +58,7 @@ public class Producto {
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.usuario = usuario;
-		this.categoria = categoria;
+
 	}
 
 
@@ -109,7 +110,7 @@ public class Producto {
 		this.cantidad = cantidad;
 	}
 
-	
+	/*
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -117,7 +118,7 @@ public class Producto {
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
-	}
+	}*/
 
 	
 	@Override

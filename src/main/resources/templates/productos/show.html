@@ -44,7 +44,6 @@
     <thead>
       <tr>
         <th scope="col">Nombre</th>
-        <th scope="col">Categoria</th>
         <th scope="col">Descripción</th>
         <th scope="col">Inventario</th>
         <th scope="col">Precio</th>
@@ -55,12 +54,11 @@
     <tbody>
       <tr th:each="p:${bProductos}">
         <td th:text=${p.nombre}></td>
-        <td th:text=${p.categoria.descripcion}></td>
         <td th:text=${p.descripcion}></td>
         <td th:text=${p.cantidad}></td>
         <td th:text=${p.precio}></td>
-        <td><a  class="btn btn-warning" href="">Editar</a> </td>
-        <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
+        <td><a  class="btn btn-warning" th:href="@{/productos/editar/{id}(id=${p.id})}">Editar</a> </td>
+        <td><a  class="btn btn-danger" th:href="@{/productos/editar/{id}(id=${p.id})}">Eliminar</a> </td>
       </tr>       
     </tbody>
   </table>
