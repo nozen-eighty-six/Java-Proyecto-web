@@ -15,10 +15,11 @@ public class UploadFileService {
 	private String folder="images//";
 	
 	public String saveImage(MultipartFile file) throws IOException {
-		if(file.isEmpty()) {
+		if(!file.isEmpty()) {
 			byte[] bytes = file.getBytes();
 			Path path = Paths.get(folder+file.getOriginalFilename());
 			Files.write(path, bytes);
+			return file.getOriginalFilename();
 		}
 		//En caso no guarda la imagen
 		return "default.jpg";
@@ -28,7 +29,7 @@ public class UploadFileService {
 	//Eliminar la imagen cuando se elimina el producto
 	public void deleteImage(String nombre ) {
 		
-		String ruta ="image//";
+		String ruta ="images//";
 		
 		File file = new File(ruta+nombre);
 		file.delete();
