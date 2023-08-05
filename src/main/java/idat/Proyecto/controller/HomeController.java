@@ -21,16 +21,15 @@ import idat.Proyecto.entity.Producto;
 import idat.Proyecto.service.ProductoService;
 
 @Controller
-@RequestMapping("/")//Apunte a la raíz
+@RequestMapping("/") // Apunte a la raíz
 public class HomeController {
-	
-	private final Logger log= LoggerFactory.getLogger(HomeController.class);
-	
-	
-	//Almacenar los detalles de la orden
+
+	private final Logger log = LoggerFactory.getLogger(HomeController.class);
+
+	// Almacenar los detalles de la orden
 	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
 
-	//Almacena los datos de la orden
+	// Almacena los datos de la orden
 	Orden orden = new Orden();
 	@Autowired
 	private ProductoService prs;
@@ -38,86 +37,103 @@ public class HomeController {
 	@GetMapping("")
 	public String home(Model model) {
 		model.addAttribute("productos", prs.findAll());
-		
+
 		return "usuario/home";
-		
+
 	}
-	
+
 	@GetMapping("productohome/{id}")
 	public String productoHome(@PathVariable Integer id, Model model) {
 		log.info("Id producto enviado como parámtero{}", id);
 		Producto producto = new Producto();
-		Optional<Producto> optionalproducto =prs.get(id);
-		
-		//Asignamos
+		Optional<Producto> optionalproducto = prs.get(id);
+
+		// Asignamos
 		producto = optionalproducto.get();
-		
+
 		model.addAttribute("producto", producto);
 		return "usuario/productohome";
 	}
-	
+
 	@PostMapping("/cart")
 	public String addproductoCarrito(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
-		
+
 		DetalleOrden detalleOrden = new DetalleOrden();
 		Producto producto = new Producto();
-		double sumaTotal=0;
-		
-		//Buscamos el producto
+		double sumaTotal = 0;
+
+		// Buscamos el producto
 		Optional<Producto> optionalProducto = prs.get(id);
 		log.info("Producto añadido:{}", optionalProducto.get());
 		log.info("Cantidad: {}", cantidad);
-		
-		//Asignamos
+
+		// Asignamos
 		producto = optionalProducto.get();
-		
-		//Asignamos el detalle
-		detalleOrden.setCantidad((double)cantidad);
+
+		// Asignamos el detalle
+		detalleOrden.setCantidad((double) cantidad);
 		detalleOrden.setPrecio(producto.getPrecio());
 		detalleOrden.setNombre(producto.getNombre());
 		detalleOrden.setTotal(producto.getPrecio() * (double) cantidad);
 		detalleOrden.setProducto(producto);
-		
-		//Asiganmos a nuestra lista global
-		detalles.add(detalleOrden);
-		
-		sumaTotal = detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
+
+		// Validación para que el producto no se agregue dos veces
+		Integer idProducto = producto.getId();
+		Boolean ingresado = detalles.stream().anyMatch(p -> p.getProducto().getId() == idProducto);
+
+		if (!ingresado) {
+
+			// Asiganmos a nuestra lista global
+			detalles.add(detalleOrden);
+		}
+
+		sumaTotal = detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
 		orden.setTotal(sumaTotal);
-		//Pasar a la vista
+		// Pasar a la vista
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
-		
+
 		return "usuario/carrito";
 	}
-	
-	//Quitar un producto del carrito
+
+	// Quitar un producto del carrito
 	@GetMapping("delete/{id}")
 	public String deleteProductoCart(@PathVariable Integer id, Model model) {
-		
-		//Lista nueva de productos, para guardarla en el global
-		List<DetalleOrden> ordenesNuevas  = new ArrayList<DetalleOrden>();
-		
-		for(DetalleOrden dto : detalles) {
-			//Agrupamos los detalles que sean diferentes al id del parámetro, 
-			//por tanto el que se quiere eliminar no se agregado a está nueva orden
-			if(dto.getProducto().getId() != id) {
+
+		// Lista nueva de productos, para guardarla en el global
+		List<DetalleOrden> ordenesNuevas = new ArrayList<DetalleOrden>();
+
+		for (DetalleOrden dto : detalles) {
+			// Agrupamos los detalles que sean diferentes al id del parámetro,
+			// por tanto el que se quiere eliminar no se agregado a está nueva orden
+			if (dto.getProducto().getId() != id) {
 				ordenesNuevas.add(dto);
-				
+
 			}
-			
-			
+
 		}
-		//Nueva lista;
-		detalles=ordenesNuevas;
-		//Se restablece el valor del total a pagar
-		double sumaTotal=0;
-		
-		sumaTotal = detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
+		// Nueva lista;
+		detalles = ordenesNuevas;
+		// Se restablece el valor del total a pagar
+		double sumaTotal = 0;
+
+		sumaTotal = detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
 		orden.setTotal(sumaTotal);
-		//Pasar a la vista
+		// Pasar a la vista
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
-		return"usuario/carrito";
-		
+		return "usuario/carrito";
+
+	}
+
+	@GetMapping("/getcart")
+	public String getcart(Model model) {
+
+		// Añadimos el detalle y la orden
+		// Pasar a la vista
+		model.addAttribute("cart", detalles);
+		model.addAttribute("orden", orden);
+
+		return "/usuario/carrito";
 	}
 }
