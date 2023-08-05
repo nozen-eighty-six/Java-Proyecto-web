@@ -1,5 +1,7 @@
 package idat.Proyecto.controller;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import idat.Proyecto.entity.Producto;
 import idat.Proyecto.service.ProductoService;
 
 @Controller
@@ -32,7 +35,13 @@ public class HomeController {
 	@GetMapping("productohome/{id}")
 	public String productoHome(@PathVariable Integer id, Model model) {
 		log.info("Id producto enviado como parámtero{}", id);
+		Producto producto = new Producto();
+		Optional<Producto> optionalproducto =prs.get(id);
 		
+		//Asignamos
+		producto = optionalproducto.get();
+		
+		model.addAttribute("producto", producto);
 		return "usuario/productohome";
 	}
 }
