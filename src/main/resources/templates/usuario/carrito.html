@@ -64,7 +64,7 @@
 									<th scope="col"th:text="${dorden.cantidad}"></th>
 									<th scope="col"th:text="${dorden.total}"></th>
 
-									<td><a href="#" class="btn btn-danger">Quitar</a></td>
+									<td><a th:href="@{/delete/{id} (id=${dorden.producto.id})}" class="btn btn-danger">Quitar</a></td>
 								</tr>
 							</tbody>
 						</table>
