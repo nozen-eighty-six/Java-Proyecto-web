@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import idat.Proyecto.entity.DetalleOrden;
 import idat.Proyecto.entity.Orden;
 import idat.Proyecto.entity.Producto;
+import idat.Proyecto.entity.Usuario;
 import idat.Proyecto.service.ProductoService;
+import idat.Proyecto.service.UsuarioService;
 
 @Controller
 @RequestMapping("/") // Apunte a la raíz
@@ -33,6 +35,9 @@ public class HomeController {
 	Orden orden = new Orden();
 	@Autowired
 	private ProductoService prs;
+	
+	@Autowired
+	private UsuarioService us;
 
 	@GetMapping("")
 	public String home(Model model) {
@@ -136,10 +141,19 @@ public class HomeController {
 
 		return "/usuario/carrito";
 	}
-	
+
 	@GetMapping("/order")
-	public String order() {
+	public String order(Model model) {
+
+		Usuario usuario = us.get(1).get();
 		
+		// Añadimos el detalle y la orden
+		// Pasar a la vista
+		model.addAttribute("cart", detalles);
+		model.addAttribute("orden", orden);
+		
+		//Pasar el usuario
+		model.addAttribute("usuario", usuario);
 		return "usuario/resumenorden";
 	}
 }
