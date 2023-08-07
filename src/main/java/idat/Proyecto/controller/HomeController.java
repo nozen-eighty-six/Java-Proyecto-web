@@ -3,6 +3,8 @@ package idat.Proyecto.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,5 +194,18 @@ public class HomeController {
 		
 		
 		return "redirect:/";
+	}
+	
+	@PostMapping("/search")
+	public String searchProduct(@RequestParam String nombre, Model model)
+	{
+		log.info("Nombre del producto: {}",nombre);
+		//Cadena de texto Transform
+		String nuevaCadena = nombre.substring(0, 1).toUpperCase() + nombre.substring(1);
+		
+		//Lista que coincidan con el texto de buscar
+		List<Producto> productos =prs.findAll().stream().filter(pr->pr.getNombre().contains(nuevaCadena)).collect(Collectors.toList());
+		model.addAttribute("productos", productos);
+		return "usuario/home";
 	}
 }
