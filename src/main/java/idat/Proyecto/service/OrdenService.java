@@ -8,4 +8,5 @@ public interface OrdenService {
 
 	public abstract Orden save(Orden orden);
 	public abstract List<Orden> findAll();
+	public abstract String getOrden();
 }

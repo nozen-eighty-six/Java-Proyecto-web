@@ -19,9 +19,11 @@ import idat.Proyecto.entity.DetalleOrden;
 import idat.Proyecto.entity.Orden;
 import idat.Proyecto.entity.Producto;
 import idat.Proyecto.entity.Usuario;
+import idat.Proyecto.service.DetalleOrdenService;
+import idat.Proyecto.service.OrdenService;
 import idat.Proyecto.service.ProductoService;
 import idat.Proyecto.service.UsuarioService;
-
+import java.util.Date;
 @Controller
 @RequestMapping("/") // Apunte a la raíz
 public class HomeController {
@@ -38,6 +40,12 @@ public class HomeController {
 	
 	@Autowired
 	private UsuarioService us;
+	
+	@Autowired
+	private OrdenService os;
+	
+	@Autowired
+	private DetalleOrdenService ods;
 
 	@GetMapping("")
 	public String home(Model model) {
@@ -155,5 +163,34 @@ public class HomeController {
 		//Pasar el usuario
 		model.addAttribute("usuario", usuario);
 		return "usuario/resumenorden";
+	}
+	
+	@GetMapping("/saveOrder")
+	public String saveOrder() {
+		Date fechaActual = new Date();
+		orden.setFechaCreacion(fechaActual);
+		orden.setNumero(os.getOrden());
+		
+		
+		//Usuario
+		Usuario usuario = us.get(1).get();
+		orden.setUsuario(usuario);
+		
+		//Guardamos en la bs
+		os.save(orden);
+		
+		//Guardamos
+		for(DetalleOrden dt:detalles) {
+			dt.setOrden(orden);
+			ods.save(dt);
+			
+		}
+		
+		//Una vez guardado limpiamos todo
+		orden = new Orden();
+		detalles.clear();
+		
+		
+		return "redirect:/";
 	}
 }

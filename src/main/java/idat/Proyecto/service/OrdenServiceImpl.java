@@ -27,8 +27,9 @@ public class OrdenServiceImpl implements OrdenService{
 		return or.findAll();
 	}
 
-	public String generarNumeroOrden() {
-		
+
+	@Override
+	public String getOrden() {
 		int numero=0;
 		String numeroConcatenado ="";//El numero de la orden
 		
