@@ -18,7 +18,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	@Override
 	public Usuario save(Usuario Usuario) {
 		// TODO Auto-generated method stub
-		return null;
+		return ur.save(Usuario);
 	}
 
 
@@ -26,13 +26,13 @@ public class UsuarioServiceImpl implements UsuarioService{
 	@Override
 	public void update(Usuario Usuario) {
 		// TODO Auto-generated method stub
-		
+		ur.save(Usuario);
 	}
 
 	@Override
 	public void delete(Integer id) {
 		// TODO Auto-generated method stub
-		
+		ur.deleteById(id);
 	}
 
 	@Override

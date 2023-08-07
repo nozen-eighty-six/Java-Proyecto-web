@@ -1,6 +1,7 @@
 package idat.Proyecto.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -48,11 +49,13 @@ public class HomeController {
 	
 	@Autowired
 	private DetalleOrdenService ods;
+	
+	Collection<Producto> productos;
 
 	@GetMapping("")
 	public String home(Model model) {
 		model.addAttribute("productos", prs.findAll());
-
+		
 		return "usuario/home";
 
 	}
