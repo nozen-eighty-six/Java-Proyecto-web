@@ -51,6 +51,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 
 
+	@Override
+	public Optional<Usuario> findByMail(String mail) {
+		// TODO Auto-generated method stub
+		return ur.findByMail(mail);
+	}
+
+
+
 
 
 
