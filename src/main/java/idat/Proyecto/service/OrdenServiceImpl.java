@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import idat.Proyecto.entity.Orden;
+import idat.Proyecto.entity.Usuario;
 import idat.Proyecto.repository.OrdenRepository;
 
 @Service
@@ -56,4 +57,12 @@ public class OrdenServiceImpl implements OrdenService{
 		}
 		return numeroConcatenado;
 	}
+
+	@Override
+	public List<Orden> findByUsuario(Usuario usuario) {
+		// TODO Auto-generated method stub
+		return or.findByUsuario(usuario);
+	}
+
+
 }

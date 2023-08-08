@@ -1,5 +1,6 @@
 package idat.Proyecto.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import idat.Proyecto.entity.Orden;
 import idat.Proyecto.entity.Usuario;
+import idat.Proyecto.service.OrdenService;
 import idat.Proyecto.service.UsuarioService;
 
 @Controller
@@ -24,6 +27,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioService us;
+	
+	@Autowired
+	private OrdenService os;
 	
 	@GetMapping("/registro")
 	public String registro_GET() {
@@ -78,6 +84,14 @@ public class UsuarioController {
 	
 	@GetMapping("/compras")
 	public String compraUsuario(Model model, HttpSession session) {
+		//Usuario
+		Usuario usari = new Usuario();
+		usari = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
+		
+		List<Orden> ordenes = os.findByUsuario(usari);
+		
+		//Lista órdenes
+		model.addAttribute("ordenes", ordenes);
 		
 		//Session
 		model.addAttribute("sesion", session.getAttribute("idusuario"));

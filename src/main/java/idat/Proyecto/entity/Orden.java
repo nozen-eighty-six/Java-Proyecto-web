@@ -29,8 +29,8 @@ public class Orden {
 	@ManyToOne
 	private Usuario usuario;
 	
-	@OneToOne(mappedBy = "orden")
-	private DetalleOrden detalle;
+	@OneToMany(mappedBy = "orden")
+	private List<DetalleOrden> detalle;
 	
 	public Orden() {
 		// TODO Auto-generated constructor stub
@@ -94,11 +94,13 @@ public class Orden {
 		this.usuario = usuario;
 	}
 
-	public DetalleOrden getDetalle() {
+	
+
+	public List<DetalleOrden> getDetalle() {
 		return detalle;
 	}
 
-	public void setDetalle(DetalleOrden detalle) {
+	public void setDetalle(List<DetalleOrden> detalle) {
 		this.detalle = detalle;
 	}
 
