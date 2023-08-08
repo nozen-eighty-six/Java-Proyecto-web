@@ -43,11 +43,6 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 
 
-	@Override
-	public Optional<Usuario> get(Integer id) {
-		// TODO Auto-generated method stub
-		return ur.findById(id);
-	}
 
 
 
@@ -55,6 +50,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 	public Optional<Usuario> findByMail(String mail) {
 		// TODO Auto-generated method stub
 		return ur.findByMail(mail);
+	}
+
+
+
+	@Override
+	public Usuario findById(Integer id) {
+		// TODO Auto-generated method stub
+		return ur.findById(id).orElse(null);
 	}
 
 

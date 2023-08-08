@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,10 @@ public class HomeController {
 	Collection<Producto> productos;
 
 	@GetMapping("")
-	public String home(Model model) {
+	public String home(Model model, HttpSession session) {
+		//Verificar la sesión, mostrará el id
+		log.info("Sesión del usuario {}", session.getAttribute("idusuario"));
+		
 		model.addAttribute("productos", prs.findAll());
 		
 		return "usuario/home";
@@ -156,9 +161,9 @@ public class HomeController {
 	}
 
 	@GetMapping("/order")
-	public String order(Model model) {
+	public String order(Model model, HttpSession session) {
 
-		Usuario usuario = us.get(1).get();
+		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
 		
 		// Añadimos el detalle y la orden
 		// Pasar a la vista
@@ -171,14 +176,14 @@ public class HomeController {
 	}
 	
 	@GetMapping("/saveOrder")
-	public String saveOrder() {
+	public String saveOrder(HttpSession session) {
 		Date fechaActual = new Date();
 		orden.setFechaCreacion(fechaActual);
 		orden.setNumero(os.getOrden());
 		
 		
 		//Usuario
-		Usuario usuario = us.get(1).get();
+		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
 		orden.setUsuario(usuario);
 		
 		//Guardamos en la bs

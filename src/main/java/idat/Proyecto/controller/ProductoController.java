@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import idat.Proyecto.entity.Producto;
 import idat.Proyecto.entity.Usuario;
 import idat.Proyecto.service.ProductoService;
 import idat.Proyecto.service.UploadFileService;
+import idat.Proyecto.service.UsuarioService;
 
 @Controller
 @RequestMapping("/productos")
@@ -31,6 +34,9 @@ public class ProductoController {
 	//Inyección
 	@Autowired
 	private ProductoService prs;
+	
+	@Autowired
+	private UsuarioService us;
 	
 	@Autowired
 	private UploadFileService ups;
@@ -49,14 +55,14 @@ public class ProductoController {
 	
 	
 	@PostMapping("/save")
-	public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+	public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
 		
 		
 		//Prueba
 		LOGGER.info("Este es el objeto producto{}", producto);
 		
 		//Necesitamos un user
-		Usuario u = new Usuario(1, "", "", "", "", "", "", "");
+		Usuario u = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
 		
 		//Guardamos
 		producto.setUsuario(u);

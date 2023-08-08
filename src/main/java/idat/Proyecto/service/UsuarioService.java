@@ -9,7 +9,7 @@ public interface UsuarioService {
 
 	
 	public abstract Usuario save(Usuario Usuario);
-	public abstract Optional<Usuario> get(Integer id);
+	public abstract Usuario findById(Integer id);
 	public abstract void update(Usuario Usuario);
 	public abstract void delete(Integer id);
 	public abstract List<Usuario> findAll();
