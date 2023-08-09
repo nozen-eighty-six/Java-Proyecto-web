@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import idat.Proyecto.entity.Orden;
 import idat.Proyecto.entity.Producto;
 import idat.Proyecto.service.OrdenService;
 import idat.Proyecto.service.ProductoService;
@@ -51,6 +53,14 @@ public class AdministradorController {
 		return "administrador/ordenes";
 	}
 	
+	@GetMapping("/detalle/{id}")
+	public String detalle(@PathVariable Integer id,Model model) {
+		log.info("El id de la orden:  {}",id);
+		 Orden orden = os.findById(id).get();
+		 
+		 model.addAttribute("detalles", orden.getDetalle());
+		return "administrador/detalleorden";
+	}
 	
 	
 	
