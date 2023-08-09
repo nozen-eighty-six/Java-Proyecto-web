@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import idat.Proyecto.entity.Producto;
+import idat.Proyecto.service.OrdenService;
 import idat.Proyecto.service.ProductoService;
 import idat.Proyecto.service.UsuarioService;
 
@@ -25,6 +26,9 @@ public class AdministradorController {
 	@Autowired
 	private UsuarioService us;
 	
+	@Autowired
+	private OrdenService os;
+	
 	@GetMapping("")
 	public String home_GET(Model model) {
 		List<Producto> productos = prs.findAll();
@@ -38,6 +42,13 @@ public class AdministradorController {
 		log.info("usuarios: {}", us.findAll());
 		model.addAttribute("usuarios", us.findAll());
 		return "administrador/usuarios";
+	}
+	
+	@GetMapping("/ordenes")
+	public String ordens(Model model) {
+		model.addAttribute("ordene", os.findAll());
+		log.info("ordenes: {}", os.findAll());
+		return "administrador/ordenes";
 	}
 	
 	
