@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,8 @@ public class UsuarioController {
 	@Autowired
 	private OrdenService os;
 	
+	BCryptPasswordEncoder passEnconder = new  BCryptPasswordEncoder();
+	
 	@GetMapping("/registro")
 	public String registro_GET() {
 		
@@ -43,6 +46,8 @@ public class UsuarioController {
 		log.info("Usuario registro: {}", usuario);
 		//Asignamos el tipo de usuario
 		usuario.setTipo("USER");
+		//Encriptamos la clave del usuario
+		usuario.setPassword(passEnconder.encode(usuario.getPassword()));
 		us.save(usuario);
 		return "redirect:/";
 	}
@@ -53,27 +58,29 @@ public class UsuarioController {
 		return "usuario/login";
 	}
 	
-	@PostMapping("/acceder")
+	@GetMapping("/acceder")
 	public String acceder(Usuario usuario, HttpSession session) {
 		log.info("Acceso: {}", usuario);
 		
-		Optional<Usuario> user = us.findByMail(usuario.getMail());
+		Optional<Usuario> user = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
 		log.info("Usuario de db: {}", user.get());
 		
 		
 		//Si está presente
 		if(user.isPresent()) {
+			log.info("Usuario presente");
 			//Para usar el id en el resto de la aplicación
 			session.setAttribute("idusuario", user.get().getId());
 			
 			//Valido el tipo
-			if(user.get().getTipo().equals("ADMIN")) {
-				return "redirect:/administrador";
+			if(user.get().getTipo().equals("USER")) {
+				log.info("Redireccionando");
+				return "redirect:/";
 				
 			}
 			else {
 				
-				return "redirect:/";
+				return "redirect:/administrador";
 			}
 		}
 		else {
@@ -87,7 +94,7 @@ public class UsuarioController {
 	public String compraUsuario(Model model, HttpSession session) {
 		//Usuario
 		Usuario usari = new Usuario();
-		usari = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
+		usari = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		List<Orden> ordenes = os.findByUsuario(usari);
 		

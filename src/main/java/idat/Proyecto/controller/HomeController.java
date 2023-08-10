@@ -168,7 +168,7 @@ public class HomeController {
 	@GetMapping("/order")
 	public String order(Model model, HttpSession session) {
 
-		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
+		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		// Añadimos el detalle y la orden
 		// Pasar a la vista
@@ -188,7 +188,7 @@ public class HomeController {
 		
 		
 		//Usuario
-		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
+		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		orden.setUsuario(usuario);
 		
 		//Guardamos en la bs

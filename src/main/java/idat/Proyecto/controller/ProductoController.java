@@ -62,7 +62,7 @@ public class ProductoController {
 		LOGGER.info("Este es el objeto producto{}", producto);
 		
 		//Necesitamos un user
-		Usuario u = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
+		Usuario u = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		//Guardamos
 		producto.setUsuario(u);

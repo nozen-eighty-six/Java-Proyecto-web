@@ -55,10 +55,12 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 
 	@Override
-	public Usuario findById(Integer id) {
+	public Optional<Usuario> findById(Integer id) {
 		// TODO Auto-generated method stub
-		return ur.findById(id).orElse(null);
+		return ur.findById(id);
 	}
+
+
 
 
 
