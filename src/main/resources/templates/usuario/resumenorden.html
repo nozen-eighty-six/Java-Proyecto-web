@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
@@ -18,6 +19,9 @@
 
 <!-- Custom styles for this template -->
 <link th:href="@{/css/heroic-features.css}" rel="stylesheet">
+
+<!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AT38SHIsVNDzbpvrO609OK8gQHkEqLlQi1elR1j0ZL7vzGmO0fwdoZX0byKLbxmkAkIWLOWCO6hXgYth&currency=USD"></script>
 </head>
 
 <body>
@@ -65,10 +69,11 @@
 									</thead>
 									<tbody>
 										<tr th:each="dtorden:${cart}">
+											
 											<td th:text="${dtorden.nombre}"></td>
 											<td th:text="${dtorden.precio}"></td>
 											<td th:text="${dtorden.cantidad}"></td>
-											<td th:text="${dtorden.total}" ></td>
+											<td th:text="${dtorden.total}"></td>
 
 										</tr>
 									</tbody>
@@ -83,8 +88,11 @@
 						<h2 class="card-title">Resumen Orden</h2>
 
 						<ul class="list-group">
-							<li class="list-group-item"><h5 th:text=" 'Total: '+${orden.total}"></h5></li>
-							<a th:href="@{/saveOrder}" class="btn btn-dark">Generar</a>
+							<li class="list-group-item"><h5
+									th:text=" 'Total: '+${orden.total}"></h5></li>
+							<!-- <a th:href="@{/saveOrder}" class="btn btn-dark">Generar</a> -->
+							<div id="paypal-button-container"></div>
+
 						</ul>
 					</div>
 				</div>
@@ -99,6 +107,73 @@
 	<!-- Bootstrap core JavaScript -->
 	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 	<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script>
+	// Supongamos que tienes un elemento con el ID "miElemento"
+	const elemento = document.getElementById('idValor');
+	
+	//var id = elemento.value;
+	//console.log(id);
+	// Ocultar el elemento cambiando su visibilidad
+	//elemento.style.visibility = 'none';
+
+	
+	paypal.Buttons({
+		style:{
+			color: 'blue',
+			shape: 'pill',
+			lable: 'pay'
+		
+		},
+		createOrder: function(data,actions){
+			return actions.order.create({
+				purchase_units:[{
+					amount:{
+						value: 100
+					
+					
+					}
+				
+				
+				}]
+			
+			
+			
+			});
+		
+		
+		},
+		//Cuando se realiza el pago
+		onApprove: function(data, actions){
+		//Que es data? Es el parámetro que recibe toda la información que
+		//se está realizando.
+			actions.order.capture().then(function(detalles){
+			//Que representa "detalles"
+			//toda la información de nuestro pago
+			console.log(detalles);
+			window.location.href="/saveOrder";
+			
+			
+			});
+		
+		},
+		//Se dispara cuando el usuario cancela el pago
+		onCancel: function(data){
+			alert("Pago cancelado");
+		
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	}).render("#paypal-button-container");
+
+	
+	</script>
 
 </body>
 

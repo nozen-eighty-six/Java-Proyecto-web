@@ -56,6 +56,11 @@ public class OrdenServiceImpl implements OrdenService{
 			numeroConcatenado = "0000000000"+String.valueOf(numero);
 			
 		}
+		else if(numero>=10 && numero<=99 ) {
+			
+			numeroConcatenado = "000000000"+String.valueOf(numero);
+		}
+		
 		return numeroConcatenado;
 	}
 

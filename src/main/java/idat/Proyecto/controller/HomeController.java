@@ -29,6 +29,7 @@ import idat.Proyecto.service.OrdenService;
 import idat.Proyecto.service.ProductoService;
 import idat.Proyecto.service.UsuarioService;
 import java.util.Date;
+
 @Controller
 @RequestMapping("/") // Apunte a la raíz
 public class HomeController {
@@ -42,28 +43,28 @@ public class HomeController {
 	Orden orden = new Orden();
 	@Autowired
 	private ProductoService prs;
-	
+
 	@Autowired
 	private UsuarioService us;
-	
+
 	@Autowired
 	private OrdenService os;
-	
+
 	@Autowired
 	private DetalleOrdenService ods;
-	
+
 	Collection<Producto> productos;
 
 	@GetMapping("")
 	public String home(Model model, HttpSession session) {
-		//Verificar la sesión, mostrará el id
+		// Verificar la sesión, mostrará el id
 		log.info("Sesión del usuario {}", session.getAttribute("idusuario"));
-		
+
 		model.addAttribute("productos", prs.findAll());
-		
-		//Session
+
+		// Session
 		model.addAttribute("sesion", session.getAttribute("idusuario"));
-		
+
 		return "usuario/home";
 
 	}
@@ -206,18 +207,18 @@ public class HomeController {
 		detalles.clear();
 		
 		
-		return "redirect:/";
+		return "usuario/compraExitosa";
 	}
-	
+
 	@PostMapping("/search")
-	public String searchProduct(@RequestParam String nombre, Model model)
-	{
-		log.info("Nombre del producto: {}",nombre);
-		//Cadena de texto Transform
+	public String searchProduct(@RequestParam String nombre, Model model) {
+		log.info("Nombre del producto: {}", nombre);
+		// Cadena de texto Transform
 		String nuevaCadena = nombre.substring(0, 1).toUpperCase() + nombre.substring(1);
-		
-		//Lista que coincidan con el texto de buscar
-		List<Producto> productos =prs.findAll().stream().filter(pr->pr.getNombre().contains(nuevaCadena)).collect(Collectors.toList());
+
+		// Lista que coincidan con el texto de buscar
+		List<Producto> productos = prs.findAll().stream().filter(pr -> pr.getNombre().contains(nuevaCadena))
+				.collect(Collectors.toList());
 		model.addAttribute("productos", productos);
 		return "usuario/home";
 	}
