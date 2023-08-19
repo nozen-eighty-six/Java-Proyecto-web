@@ -86,9 +86,10 @@
 
 					<div class="col-lg-3">
 						<h2 class="card-title">Resumen Orden</h2>
-
+<input id="total" type="hidden" th:value="${orden.total}">
 						<ul class="list-group">
-							<li class="list-group-item"><h5
+							<li class="list-group-item"><h5 
+						
 									th:text=" 'Total: '+${orden.total}"></h5></li>
 							<!-- <a th:href="@{/saveOrder}" class="btn btn-dark">Generar</a> -->
 							<div id="paypal-button-container"></div>
@@ -109,8 +110,10 @@
 	<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 	<script>
 	// Supongamos que tienes un elemento con el ID "miElemento"
-	const elemento = document.getElementById('idValor');
+	var total = document.getElementById('total').value;
+	var totalNumero = parseInt(total.textContent);
 	
+	console.log(total);
 	//var id = elemento.value;
 	//console.log(id);
 	// Ocultar el elemento cambiando su visibilidad
@@ -128,7 +131,7 @@
 			return actions.order.create({
 				purchase_units:[{
 					amount:{
-						value: 100
+						value: total
 					
 					
 					}

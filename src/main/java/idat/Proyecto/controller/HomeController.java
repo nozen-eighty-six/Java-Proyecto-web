@@ -24,16 +24,20 @@ import idat.Proyecto.entity.DetalleOrden;
 import idat.Proyecto.entity.Orden;
 import idat.Proyecto.entity.Producto;
 import idat.Proyecto.entity.Usuario;
+import idat.Proyecto.entity.Venta;
 import idat.Proyecto.service.DetalleOrdenService;
 import idat.Proyecto.service.OrdenService;
 import idat.Proyecto.service.ProductoService;
 import idat.Proyecto.service.UsuarioService;
+import idat.Proyecto.service.VentaService;
+
 import java.util.Date;
 
 @Controller
 @RequestMapping("/") // Apunte a la raíz
 public class HomeController {
 
+	
 	private final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	// Almacenar los detalles de la orden
@@ -52,6 +56,11 @@ public class HomeController {
 
 	@Autowired
 	private DetalleOrdenService ods;
+
+	@Autowired
+	private VentaService vs;
+	
+
 
 	Collection<Producto> productos;
 
@@ -160,8 +169,8 @@ public class HomeController {
 		// Pasar a la vista
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
-		//Session
-				model.addAttribute("session", session.getAttribute("idusuario"));
+		// Session
+		model.addAttribute("session", session.getAttribute("idusuario"));
 
 		return "/usuario/carrito";
 	}
@@ -170,43 +179,67 @@ public class HomeController {
 	public String order(Model model, HttpSession session) {
 
 		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
-		
+
 		// Añadimos el detalle y la orden
 		// Pasar a la vista
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
-		
-		//Pasar el usuario
+
+		// Pasar el usuario
 		model.addAttribute("usuario", usuario);
 		return "usuario/resumenorden";
 	}
-	
+
 	@GetMapping("/saveOrder")
-	public String saveOrder(HttpSession session) {
+	public String saveOrder(HttpSession session, Model model) {
 		Date fechaActual = new Date();
 		orden.setFechaCreacion(fechaActual);
 		orden.setNumero(os.getOrden());
-		
-		
-		//Usuario
+
+		// Usuario
 		Usuario usuario = us.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		orden.setUsuario(usuario);
-		
-		//Guardamos en la bs
+
+		// Guardamos en la bs
 		os.save(orden);
-		
-		//Guardamos
-		for(DetalleOrden dt:detalles) {
+
+		// Guardamos
+		for (DetalleOrden dt : detalles) {
 			dt.setOrden(orden);
 			ods.save(dt);
+
+		}
+		
+		List<Orden> ordenes = new ArrayList<Orden>();
+		ordenes = os.findByUsuario(usuario);
+		log.info("ordenes: {}", ordenes);
+		
+		
+		//Problema de la propiedad es nulla
+		double sumaUser = 0;
+		for(Orden or: ordenes) {
+			Double sumaTotal = or.getTotal();
+			if(sumaTotal != null) {
+				
+				sumaUser+= sumaTotal.doubleValue();
+			}
+			
 			
 		}
 		
-		//Una vez guardado limpiamos todo
+		log.info("suma: {}", sumaUser);
+		Venta ventaUser = new Venta();
+		ventaUser.setUsuario(usuario);
+		ventaUser.setTotal(sumaUser);
+		ventaUser.setFechaCreacion(fechaActual);
+		vs.save(ventaUser);
+		
+		// Una vez guardado limpiamos todo
 		orden = new Orden();
 		detalles.clear();
-		
-		
+
+		// model.addAttribute("userdetalle", ventaUser);
+
 		return "usuario/compraExitosa";
 	}
 

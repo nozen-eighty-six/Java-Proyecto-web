@@ -34,6 +34,9 @@ public class Usuario {
 	private List<Producto> productos;
 	
 	@OneToMany(mappedBy = "usuario")
+	private List<Venta> ventas;
+	
+	@OneToMany(mappedBy = "usuario")
 	private List<Orden> ordenes;
 	public Usuario() {
 		// TODO Auto-generated constructor stub

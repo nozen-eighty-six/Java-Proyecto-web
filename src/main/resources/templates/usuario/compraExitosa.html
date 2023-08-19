@@ -32,6 +32,13 @@
 			<h1 class="display-3">Compra exitosa</h1>
 			<a class="btn btn-danger">Volver a la tienda</a>
 		</header>
+		<!-- 
+		 <form th:object="${userdetalle}" >
+        <input id="iduser" type="hidden" th:value="orden.id"/>
+       <input type="hidden" th:value="usuario.id"/>
+       <input type="hidden" th:value="total"/>
+        <input type="hidden" th:value="fechaCreacion"/>
+    </form> -->
 
 		
 		
@@ -45,6 +52,13 @@
 	<!-- Bootstrap core JavaScript -->
 	<script th:src="@{vendor/jquery/jquery.min.js}"></script>
 	<script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script>
+		var iduser = document.getElementById('iduser').value;
+	
+		console.log(iduser);
+	
+	
+	</script>
 </body>
 
 </html>

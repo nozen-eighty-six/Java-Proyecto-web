@@ -1,5 +1,7 @@
 package idat.Proyecto.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +20,13 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
 		return dtr.save(dto);
 	}
 
+	@Override
+	public Optional<DetalleOrden> findDetalleById(Integer ordenid) {
+		// TODO Auto-generated method stub
+		return dtr.findDetalleById(ordenid);
+	}
+	
+	
+	
 }
+

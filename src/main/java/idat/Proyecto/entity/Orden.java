@@ -32,6 +32,9 @@ public class Orden {
 	@OneToMany(mappedBy = "orden")
 	private List<DetalleOrden> detalle;
 	
+	
+
+	
 	public Orden() {
 		// TODO Auto-generated constructor stub
 	}
