@@ -37,7 +37,6 @@ import java.util.Date;
 @RequestMapping("/") // Apunte a la raíz
 public class HomeController {
 
-	
 	private final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	// Almacenar los detalles de la orden
@@ -59,8 +58,6 @@ public class HomeController {
 
 	@Autowired
 	private VentaService vs;
-	
-
 
 	Collection<Producto> productos;
 
@@ -79,7 +76,7 @@ public class HomeController {
 	}
 
 	@GetMapping("productohome/{id}")
-	public String productoHome(@PathVariable Integer id, Model model) {
+	public String productoHome(@PathVariable Integer id, Model model, HttpSession session) {
 		log.info("Id producto enviado como parámtero{}", id);
 		Producto producto = new Producto();
 		Optional<Producto> optionalproducto = prs.get(id);
@@ -88,6 +85,9 @@ public class HomeController {
 		producto = optionalproducto.get();
 
 		model.addAttribute("producto", producto);
+
+		// Session
+		model.addAttribute("sesion", session.getAttribute("idusuario"));
 		return "usuario/productohome";
 	}
 
@@ -209,31 +209,29 @@ public class HomeController {
 			ods.save(dt);
 
 		}
-		
+
 		List<Orden> ordenes = new ArrayList<Orden>();
 		ordenes = os.findByUsuario(usuario);
 		log.info("ordenes: {}", ordenes);
-		
-		
-		//Problema de la propiedad es nulla
+
+		// Problema de la propiedad es nulla
 		double sumaUser = 0;
-		for(Orden or: ordenes) {
+		for (Orden or : ordenes) {
 			Double sumaTotal = or.getTotal();
-			if(sumaTotal != null) {
-				
-				sumaUser+= sumaTotal.doubleValue();
+			if (sumaTotal != null) {
+
+				sumaUser += sumaTotal.doubleValue();
 			}
-			
-			
+
 		}
-		
+
 		log.info("suma: {}", sumaUser);
 		Venta ventaUser = new Venta();
 		ventaUser.setUsuario(usuario);
 		ventaUser.setTotal(sumaUser);
 		ventaUser.setFechaCreacion(fechaActual);
 		vs.save(ventaUser);
-		
+
 		// Una vez guardado limpiamos todo
 		orden = new Orden();
 		detalles.clear();

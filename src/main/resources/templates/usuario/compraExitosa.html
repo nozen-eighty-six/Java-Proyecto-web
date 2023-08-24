@@ -18,6 +18,16 @@
 
 <!-- Custom styles for this template -->
 <link th:href="@{css/heroic-features.css}" rel="stylesheet">
+
+<style>
+body{
+ margin: 0;
+
+
+}
+
+
+</style>
 <body>
 
 	<!-- Navigation -->
@@ -25,12 +35,12 @@
 	<div th:include="usuario/template_usuario.html::header" th:if="${sesion==null}"></div>
 	<div th:include="usuario/template_usuario.html::header-user" th:unless="${sesion==null}"></div>
 	<!-- Page Content -->
-	<div class="container">
+	<div class="container d-flex justify-content-center align-items-center h-100">
 
 		<!-- Jumbotron Header -->
 		<header class="jumbotron my-4 text-center text-white" style="background-color:#66d7d1">
 			<h1 class="display-3">Compra exitosa</h1>
-			<a class="btn btn-danger">Volver a la tienda</a>
+			<a class="btn btn-danger" th:href="@{/}">Volver a la tienda</a>
 		</header>
 		<!-- 
 		 <form th:object="${userdetalle}" >
@@ -47,7 +57,7 @@
 	<!-- /.container -->
 
 	<!-- Footer -->
-	<div th:include="usuario/template_usuario.html::footer"></div>
+	<div class="fixed-bottom" th:include="usuario/template_usuario.html::footer"></div>
 
 	<!-- Bootstrap core JavaScript -->
 	<script th:src="@{vendor/jquery/jquery.min.js}"></script>
